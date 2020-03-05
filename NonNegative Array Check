@@ -25,3 +25,48 @@ quit:
 
 exit
 main ENDP
+
+
+
+; IF Operator
+    mov     eax,op1
+    cmp     eax,op2             ; Check if op1 == op2
+    jne L1                      ; If NOT equal move to next line otherwise move to L1
+    mov     eax,X
+    cmp     eax,Y               ; X > Y?
+    je      L1                  ; yes: call Routine1
+    jmp L2                      ; and exit
+L1: mov x, 1                  ; call Routine1
+    mov y, 2                      ; and exit
+L2: 
+
+
+; AND Operator
+    cmp al,bl                   ; first expression...
+    ja L1
+    jmp next
+L1: cmp bl,cl                   ; second expression...
+    ja L2
+    jmp next
+L2: mov X,1                     ; both true: set X to 1
+    next:
+
+; OR Operator
+    cmp al,bl                   ; 1: compare AL to BL
+    ja L1                       ; if true, skip second expression
+    cmp bl,cl                   ; 2: compare BL to CL
+    jbe next                    ; false: skip next statement
+L1: mov X,1                     ; true: set X = 1
+    next:
+
+; WHILE LOOPS
+    mov eax,val1                ; copy variable to EAX
+beginwhile:
+    cmp eax,val2                ; if not (val1 < val2)
+    jnl endwhile                ; exit the loop
+    inc eax                     ; val1++;
+    dec val2                    ; val2--;
+    jmp beginwhile              ; repeat the loop
+endwhile:
+    mov val1,eax                ; save new value for val1
+
