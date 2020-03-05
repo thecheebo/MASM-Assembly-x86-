@@ -28,45 +28,58 @@ main ENDP
 
 
 
-; IF Operator
+; IF Operator 1
     mov     eax,op1
     cmp     eax,op2             ; Check if op1 == op2
     jne L1                      ; If NOT equal move to next line otherwise move to L1
     mov     eax,X
-    cmp     eax,Y               ; X > Y?
-    je      L1                  ; yes: call Routine1
+    mov     eax,Y               ; X > Y?
+    
+; IF Operator 2    
+    mov     eax,op1
+    cmp     eax,op2             ; op1 == op2?
+    je      L1                  ; yes: call jump to L1
     jmp L2                      ; and exit
-L1: mov x, 1                  ; call Routine1
-    mov y, 2                      ; and exit
+L1: mov x, 1                    ; assign x and y
+    mov y, 2                    
 L2: 
 
 
-; AND Operator
-    cmp al,bl                   ; first expression...
-    ja L1
-    jmp next
-L1: cmp bl,cl                   ; second expression...
-    ja L2
-    jmp next
-L2: mov X,1                     ; both true: set X to 1
+; AND Operator 1
+    cmp al,bl                   ; compares al and bl
+    ja L1                       ; jump if above if left op > right op
+    jmp next                    ; skips L1 if the above is not true.
+L1: cmp bl,cl                   ; compares  BL and  cl
+    ja L2                       ; jump if above if left op > right op, next line if not
+    jmp next                    ; jump to next and not to L2 if the above is not true.
+L2: mov X,1                     ; if L1 is true then L2, and if L2, then set X to 1
     next:
 
+; AND Operator 1                
+    cmp al,bl                   ; compare if AL and BL 
+    jbe next                    ; if bl > al, then quit and go to next:
+    cmp bl,cl                   ; check if bl > cl
+    jbe next                    ; jump to next if bl was below cl
+    mov X,1                     ; if both were true: set X to 1
+next:
+
 ; OR Operator
-    cmp al,bl                   ; 1: compare AL to BL
-    ja L1                       ; if true, skip second expression
-    cmp bl,cl                   ; 2: compare BL to CL
-    jbe next                    ; false: skip next statement
-L1: mov X,1                     ; true: set X = 1
+    cmp al,bl                   ; compare if Al > bl
+    ja L1                       ; if AL > bl, then go to L1
+    cmp bl,cl                   ; compare bl and cl
+    jbe next                    ; if bl was less then CL then go to next, otherwise skip and go to LA
+L1: mov X,1                     ; if the first compare is true and 2nd is false then L1
     next:
 
 ; WHILE LOOPS
-    mov eax,val1                ; copy variable to EAX
+    mov eax,val1                ; move val1 to eax
 beginwhile:
     cmp eax,val2                ; if not (val1 < val2)
-    jnl endwhile                ; exit the loop
-    inc eax                     ; val1++;
-    dec val2                    ; val2--;
-    jmp beginwhile              ; repeat the loop
+    jnl endwhile                ; JNL is " Jump if not less (same as JGE)"  so if val1 was greater
+                                ; then or equal to val 2, exit the loop
+    inc eax                     ; increase eax/val1 by 1;
+    dec val2                    ; decrease val2 by 1;
+    jmp beginwhile              ; start to the beginning of the while loop and compare val1 and 2 again
 endwhile:
-    mov val1,eax                ; save new value for val1
+    mov val1,eax                ; save the new value for val1 into eax
 
