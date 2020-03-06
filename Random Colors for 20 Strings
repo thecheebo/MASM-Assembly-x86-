@@ -1,0 +1,45 @@
+TITLE Chapter 6 Colorizer
+
+INCLUDE Irvine32.inc
+
+.data
+colortext BYTE "This is a randomized color of a string.",0
+numoflines DWORD 20
+
+.code
+main PROC
+ 
+    mov ecx, numoflines
+L1:
+    
+    call Colorizer
+    loop L1
+
+
+exit
+main ENDP
+
+; -----------------------------------------------------------------------
+Colorizer PROC
+;------------------------------------------------------------------------
+    mov eax, 10
+    call RandomRange
+    
+    .IF eax <= 2    ; 
+        mov eax,white + (black * 16)    ; white on black     
+    .ELSEIF eax <= 3
+        mov eax,blue + (black * 16)     ; blue on black
+    .ELSE
+        mov eax,green + (black * 16)    ; green on black
+    .ENDIF
+   
+    call SetTextColor
+    mov edx, OFFSET colortext
+    call WriteString
+    call WriteChar          ; display grade letter in AL
+    call Crlf
+    ret
+Colorizer ENDP
+;-------------------------------------------------------------------------
+
+END main
